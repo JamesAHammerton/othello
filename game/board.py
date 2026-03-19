@@ -12,7 +12,7 @@ INITIAL_SQUARES: dict[Square, Colour] = {
 
 
 class Board:
-    """8×8 Othello board.
+    """8x8 Othello board.
 
     Internally stores pieces as a dict mapping Square -> Colour.
     Squares not in the dict are empty.

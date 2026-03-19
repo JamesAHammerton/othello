@@ -1,6 +1,6 @@
 import pytest
 
-from game.board import Board, INITIAL_SQUARES
+from game.board import INITIAL_SQUARES, Board
 
 
 class TestBoardInit:

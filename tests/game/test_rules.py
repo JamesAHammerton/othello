@@ -1,7 +1,7 @@
 import pytest
 
 from game.board import Board
-from game.rules import legal_moves, flipped_squares, apply_move, is_game_over, opponent
+from game.rules import apply_move, flipped_squares, is_game_over, legal_moves, opponent
 
 
 class TestOpponent:

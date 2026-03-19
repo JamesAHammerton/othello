@@ -1,7 +1,7 @@
 import pytest
 
-from game.board import Board
 from ai.minimax import best_move
+from game.board import Board
 
 
 class TestBestMove:

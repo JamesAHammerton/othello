@@ -1,5 +1,5 @@
 from PySide6.QtCore import Signal
-from PySide6.QtGui import QPaintEvent, QMouseEvent
+from PySide6.QtGui import QMouseEvent, QPaintEvent
 from PySide6.QtWidgets import QWidget
 
 from game.board import Board, Square
@@ -11,7 +11,7 @@ HIGHLIGHT_ILLEGAL = "illegal"  # red — illegal human selection
 
 
 class BoardWidget(QWidget):
-    """Paints the 8×8 Othello board and emits square_clicked signals.
+    """Paints the 8x8 Othello board and emits square_clicked signals.
 
     Visual states per square:
     - Empty: light grey
@@ -23,7 +23,7 @@ class BoardWidget(QWidget):
 
     Grid lines: 2px dark blue separating each square.
     Column labels A-H (top), row labels 1-8 (left).
-    Square size: ~1 cm × 1 cm based on physical DPI.
+    Square size: ~1 cm x 1 cm based on physical DPI.
     """
 
     square_clicked = Signal(tuple)  # emits Square = (col, row)

@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2026-03-19 23:57 GMT — Ruff linting configuration
+
+### Changes
+- Added `[tool.ruff.lint]` config to `pyproject.toml` enabling rule sets: E, F, I, N, UP, B, RUF, PT
+- Added `per-file-ignores` suppressing `F401` in `tests/` and `ui/` (unused imports expected in stubs)
+- Fixed `I001`: sorted imports in test files and `ui/board_widget.py`
+- Fixed `RUF002`: replaced ambiguous `×` character with `x` in docstrings in `game/board.py` and `ui/board_widget.py`
+
+### Reasoning
+Enabling a broad but practical ruleset early catches issues as code is written rather than in bulk later. Suppressing `F401` for stub files avoids noise until implementations are in place, at which point the ignores will be removed.
+
+---
+
 ## 2026-03-19 23:44 GMT — Formatting and conventions
 
 ### Changes

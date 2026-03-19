@@ -1,7 +1,7 @@
 import pytest
 
-from game.board import Board
 from ai.scorer import score
+from game.board import Board
 
 
 class TestScore:
