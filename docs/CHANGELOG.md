@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 2026-03-19 23:44 GMT — Formatting and conventions
+
+### Changes
+- Removed redundant `from __future__ import annotations` from all source files (Python ≥ 3.13 supports all type hint syntax natively)
+- Applied `ruff format` to bring all files into compliance with the project's formatting standard
+- Added explanatory comment to `DIRECTIONS` in `game/rules.py`
+- Updated `CLAUDE.md` to mandate `ruff format` after changes and to specify GMT timestamps in CHANGELOG entries
+
+### Reasoning
+Establishing consistent formatting early avoids noisy diffs later. Documenting the conventions in `CLAUDE.md` ensures they are applied automatically in future sessions.
+
+---
+
 ## 2026-03-19 23:34 GMT — Initial project scaffold
 
 ### Changes

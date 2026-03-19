@@ -1,4 +1,3 @@
-
 from typing import Literal
 
 Colour = Literal["white", "black"]

@@ -1,10 +1,18 @@
-
 from game.board import Board, Colour, Square
 
+# Unit vectors for all 8 directions (horizontal, vertical, diagonal).
+# Used to cast rays from a candidate square: a move is legal if at least one
+# ray crosses one or more opponent pieces and terminates on a friendly piece.
+# All opponent pieces along such rays are flipped when the move is played.
 DIRECTIONS: list[tuple[int, int]] = [
-    (-1, -1), (0, -1), (1, -1),
-    (-1,  0),          (1,  0),
-    (-1,  1), (0,  1), (1,  1),
+    (-1, -1),
+    (0, -1),
+    (1, -1),
+    (-1, 0),
+    (1, 0),
+    (-1, 1),
+    (0, 1),
+    (1, 1),
 ]
 
 CORNERS: list[Square] = [(0, 0), (7, 0), (0, 7), (7, 7)]

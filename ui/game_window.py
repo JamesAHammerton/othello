@@ -1,4 +1,3 @@
-
 from PySide6.QtWidgets import QMainWindow
 
 from game.board import Colour, Square

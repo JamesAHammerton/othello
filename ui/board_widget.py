@@ -1,4 +1,3 @@
-
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QPaintEvent, QMouseEvent
 from PySide6.QtWidgets import QWidget
@@ -7,8 +6,8 @@ from game.board import Board, Square
 
 # Highlight state constants
 HIGHLIGHT_NONE = "none"
-HIGHLIGHT_LEGAL = "legal"       # bright green — chosen move about to be placed
-HIGHLIGHT_ILLEGAL = "illegal"   # red — illegal human selection
+HIGHLIGHT_LEGAL = "legal"  # bright green — chosen move about to be placed
+HIGHLIGHT_ILLEGAL = "illegal"  # red — illegal human selection
 
 
 class BoardWidget(QWidget):

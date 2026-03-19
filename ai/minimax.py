@@ -1,4 +1,3 @@
-
 from game.board import Board, Colour, Square
 
 

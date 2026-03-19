@@ -1,4 +1,3 @@
-
 from PySide6.QtCore import QObject, QRunnable, Signal
 
 from game.board import Board, Colour, Square
