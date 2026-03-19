@@ -36,6 +36,8 @@ in order to guide where/how changes should be made.
     then let the human know they need to review it. 
 * Use Test Driven Development.
 * Once changes have been made, update CODE_STRUCTURE.md, and [CHANGELOG.md](docs/CHANGELOG.md)
+  * CHANGELOG entries must include the date, time, and timezone in the heading, e.g. `2026-03-19 23:34 GMT — Description`
+  * Always use GMT as the timezone
 * Ensure [README.md](README.md) is kept up to date too.
 
 # Executing code

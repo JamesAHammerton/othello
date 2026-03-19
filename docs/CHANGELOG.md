@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 2026-03-19 — Initial project scaffold
+## 2026-03-19 23:34 GMT — Initial project scaffold
 
 ### Changes
 - Added `docs/REQUIREMENTS.md` defining the MVP feature set
