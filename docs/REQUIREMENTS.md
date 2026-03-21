@@ -66,3 +66,35 @@ its move, when it's the computer player's turn.
     Again this should have an 'OK' button, the clicking of which triggers the computer's pass, enabling the human to play their next move.
 * If neither player can make a legal move, the popup should state this, and clicking 'OK' finishes the game.
 * All pass and end-game popups must be fully dismissed (i.e. 'OK' clicked) before the next game action is triggered — no move, pass, or turn transition should occur while a popup is open.
+
+## Phase 2: Smarter computer players
+
+* There will now be 4 levels of computer player
+* The levels will be defined as follows and in the following order:
+  * Dumb: this level makes a legal move at random
+  * Naive: this level uses minimax search to depth 2, scoring the board using only raw piece count, i.e. the first term of the MVP player's evaluation function (number of computer's pieces - number of opponent's pieces)
+  * Amateur: this level is the computer player from the MVP - this is the default level
+  * Experienced: this level is like the computer player from the MVP, but with minimax search depth 6, and
+    additionally penalises C-squares (the edge squares immediately adjacent to each corner, e.g. A2, B1) using
+    the following extra scoring term:
+    * 5 * (the number of C-squares the opponent holds - the number of C-squares the computer holds)
+  * Expert: this level is like Experienced level but additionally scores relative mobility:
+    * 1 * (the number of legal moves the computer can make - the number of legal moves the opponent can make)
+* All levels from Experienced upward must use alpha-beta pruning to keep move calculation fast enough that the
+  UI remains responsive.
+* Tied scoring for a move at all levels is dealt with by randomly choosing among the tied moves.
+* The launch window should contain a new button displaying the current level name.
+  * To its left there's a label saying "Level:".
+  * This label + button will sit above the buttons from the MVP.
+  * The default level is Amateur.
+  * Clicking on the button will cycle through the levels in order: Dumb → Naive → Amateur → Experienced → Expert → Dumb,
+    selecting each as the computer level accordingly.
+  * The level should persist until changed by the user clicking the button or the program exits.
+* Hovering over any button in any of the windows will show a tooltip with an explanation of the button's purpose.
+  * However, hovering over the button giving the level should show a tooltip that also explains briefly how the computer
+  player selects its moves, using the same strategy description text shown in the game window's left panel.
+  This tooltip must update dynamically to reflect the currently selected level.
+* The left hand panel in the game window should now display the level of the computer player as well as:
+  * a description of the computer player's strategy (immediately below the level, with an indent of 2 chars)
+  * which player is white (human or computer)
+  * which player is black (human or computer)

@@ -10,10 +10,16 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "mypy>=1.15.0",
+    "pre-commit>=4.0.0",
     "pytest>=9.0.2",
+    "pytest-cov>=6.0.0",
     "ruff>=0.15.7",
 ]
 
+[tool.pytest.ini_options]
+addopts = "--cov=game --cov=ai --cov=ui --cov=main"
+
 [tool.ruff.lint]
-select = ["E", "F", "I", "N", "UP", "B", "RUF", "PT"]
+select = ["E", "F", "I", "N", "UP", "B", "RUF", "PT", "SIM", "A", "ARG", "PIE", "T20"]
 

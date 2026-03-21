@@ -35,7 +35,9 @@ in order to guide where/how changes should be made.
     * Add the proposal to [ARCHITECTURE.md](docs/ARCHITECTURE.md) in this case,
     then let the human know they need to review it. 
 * Use Test Driven Development.
+* Keep UI classes (`ui/`) as thin as possible — rendering and event forwarding only. Any logic that can be tested should live in `game/` or `ai/`, not in UI classes.
 * Run `uv run ruff format .` after making changes.
+* Run `uv run mypy . --exclude .venv` after making changes and fix any type errors before proceeding.
 * Once changes have been made, update CODE_STRUCTURE.md, and [CHANGELOG.md](docs/CHANGELOG.md)
   * CHANGELOG entries must include the date, time, and timezone in the heading, e.g. `2026-03-19 23:34 GMT — Description`
   * Always use GMT as the timezone
