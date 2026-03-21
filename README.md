@@ -16,6 +16,12 @@ uv run python main.py
 ## Development
 
 ```bash
+# Install dependencies and dev tools
+uv sync
+
+# Install pre-commit hooks (run once after cloning)
+uv run pre-commit install
+
 # Run tests
 uv run pytest
 
