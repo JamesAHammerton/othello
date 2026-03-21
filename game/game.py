@@ -1,3 +1,4 @@
+from game import rules
 from game.board import Board, Colour, Square
 
 
@@ -14,7 +15,11 @@ class Game:
         Args:
             human_colour: The colour the human player is using.
         """
-        raise NotImplementedError
+        self._board = Board()
+        self._human_colour = human_colour
+        self._computer_colour: Colour = rules.opponent(human_colour)
+        self._current_player: Colour = "black"  # black always goes first
+        self._turn_count = 0
 
     # ------------------------------------------------------------------
     # Properties
@@ -23,27 +28,27 @@ class Game:
     @property
     def board(self) -> Board:
         """The current board state."""
-        raise NotImplementedError
+        return self._board
 
     @property
     def current_player(self) -> Colour:
         """The colour whose turn it is."""
-        raise NotImplementedError
+        return self._current_player
 
     @property
     def human_colour(self) -> Colour:
         """The colour assigned to the human player."""
-        raise NotImplementedError
+        return self._human_colour
 
     @property
     def computer_colour(self) -> Colour:
         """The colour assigned to the computer player."""
-        raise NotImplementedError
+        return self._computer_colour
 
     @property
     def turn_count(self) -> int:
         """Number of turns that have been played (0 at game start)."""
-        raise NotImplementedError
+        return self._turn_count
 
     # ------------------------------------------------------------------
     # Queries
@@ -51,19 +56,19 @@ class Game:
 
     def score(self) -> tuple[int, int]:
         """Return (white_count, black_count)."""
-        raise NotImplementedError
+        return self._board.piece_counts()
 
     def legal_moves(self) -> list[Square]:
         """Return legal moves for the current player."""
-        raise NotImplementedError
+        return rules.legal_moves(self._board, self._current_player)
 
     def is_over(self) -> bool:
         """Return True when the game has ended."""
-        raise NotImplementedError
+        return rules.is_game_over(self._board)
 
     def is_human_turn(self) -> bool:
         """Return True when it is the human player's turn."""
-        raise NotImplementedError
+        return self._current_player == self._human_colour
 
     # ------------------------------------------------------------------
     # Mutations
@@ -74,8 +79,11 @@ class Game:
 
         Raises ValueError if the move is illegal.
         """
-        raise NotImplementedError
+        self._board = rules.apply_move(self._board, self._current_player, square)
+        self._turn_count += 1
+        self._current_player = rules.opponent(self._current_player)
 
     def pass_turn(self) -> None:
         """Pass the current player's turn and advance to the opponent."""
-        raise NotImplementedError
+        self._turn_count += 1
+        self._current_player = rules.opponent(self._current_player)

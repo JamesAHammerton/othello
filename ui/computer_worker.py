@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, QRunnable, Signal
 
+from ai.minimax import best_move
 from game.board import Board, Colour, Square
 
 
@@ -26,8 +27,11 @@ class ComputerWorker(QRunnable):
             colour: The colour the computer is playing.
         """
         super().__init__()
-        raise NotImplementedError
+        self._board = board
+        self._colour = colour
+        self.signals = WorkerSignals()
 
     def run(self) -> None:
         """Compute the best move and emit ``signals.move_ready``."""
-        raise NotImplementedError
+        square: Square = best_move(self._board, self._colour)
+        self.signals.move_ready.emit(square)
