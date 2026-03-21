@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## 2026-03-21 GMT — Phase 2: five AI levels with alpha-beta pruning
+
+### Changes
+
+**Game layer (`game/`)**
+- Added `C_SQUARES` constant to `game/rules.py`: 8 edge squares adjacent to the four corners
+
+**AI layer (`ai/`)**
+- Renamed `scorer.score` → `score_amateur`; added `score_naive` (piece count only), `score_experienced` (amateur + C-square penalty), `score_expert` (experienced + mobility). Added `Scorer` type alias. `score` alias retained for backward compatibility.
+- Added `_alpha_beta` and `_best_move_alpha_beta` to `ai/minimax.py`; accepts a `Scorer` callable. Existing `best_move`/`_minimax` unchanged.
+- Added new module `ai/levels.py`: `PlayerLevel` enum (DUMB/NAIVE/AMATEUR/EXPERIENCED/EXPERT), `LevelConfig` dataclass, `LEVEL_CONFIGS`, `LEVEL_ORDER`, `DEFAULT_LEVEL`, `choose_move()`, `next_level()`.
+
+**UI layer (`ui/`)**
+- `ComputerWorker`: accepts `PlayerLevel`; calls `choose_move()` instead of `best_move()`.
+- `LaunchWindow`: added level-cycle button (displays current level name, tooltip shows strategy description); added tooltips to Play and Quit buttons.
+- `SidePanel`: added level name/description labels and White/Black player identity labels; new `set_level()` and `set_players()` methods.
+- `GameWindow`: accepts `PlayerLevel`; calls `side_panel.set_level()` and `side_panel.set_players()` on init; passes level to `ComputerWorker`.
+
+**Tests**
+- Added `TestCSquares` to `tests/game/test_rules.py`
+- Replaced `TestScore` with `TestScoreNaive`, `TestScoreAmateur`, `TestScoreExperienced`, `TestScoreExpert` in `tests/ai/test_scorer.py`
+- Added `TestBestMoveAlphaBeta` to `tests/ai/test_minimax.py`
+- Added new `tests/ai/test_levels.py`: `TestLevelOrder`, `TestDefaultLevel`, `TestNextLevel`, `TestChooseMove`
+
+---
+
 ## 2026-03-21 GMT — MVP implementation
 
 ### Changes
