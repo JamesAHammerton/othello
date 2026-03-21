@@ -1,5 +1,9 @@
+from collections.abc import Callable
+
 from game.board import Board, Colour
 from game.rules import C_SQUARES, CORNERS, legal_moves, opponent
+
+Scorer = Callable[[Board, Colour], int]
 
 # Squares diagonally adjacent to each corner — holding these is disadvantageous
 # because it gives the opponent a path to the corner.

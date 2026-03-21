@@ -1,11 +1,8 @@
 import random
-from collections.abc import Callable
 
-from ai.scorer import score
+from ai.scorer import Scorer, score
 from game.board import Board, Colour, Square
 from game.rules import apply_move, is_game_over, legal_moves, opponent
-
-Scorer = Callable[[Board, Colour], int]
 
 
 def best_move(board: Board, colour: Colour, depth: int = 4) -> Square:
