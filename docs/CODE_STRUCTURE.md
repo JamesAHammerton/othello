@@ -91,9 +91,9 @@ PySide6 (Qt6). No game logic.
 | Symbol | Kind | Description |
 |--------|------|-------------|
 | `LaunchWindow` | class | `QMainWindow` — initial window with Play/Quit buttons |
-| `LaunchWindow.__init__` | method | Builds and shows the window |
-| `LaunchWindow._on_play_white` | method | Opens `GameWindow` with human as White |
-| `LaunchWindow._on_play_black` | method | Opens `GameWindow` with human as Black |
+| `LaunchWindow.__init__` | method | Builds the window (caller must call `show()`) |
+| `LaunchWindow._on_play_white` | method | Opens `GameWindow` with human as White, hides self |
+| `LaunchWindow._on_play_black` | method | Opens `GameWindow` with human as Black, hides self |
 | `LaunchWindow._on_quit` | method | Quits the application |
 
 ### `ui/game_window.py`
@@ -101,7 +101,7 @@ PySide6 (Qt6). No game logic.
 | Symbol | Kind | Description |
 |--------|------|-------------|
 | `GameWindow` | class | `QMainWindow` — hosts `SidePanel` + `BoardWidget`, drives turn loop |
-| `GameWindow.__init__` | method | `(human_colour)` — creates `Game`, lays out widgets, starts first turn |
+| `GameWindow.__init__` | method | `(human_colour, launch_window)` — creates `Game`, lays out widgets, shows window, starts first turn |
 | `GameWindow._start_turn` | method | Checks game-over / pass / dispatches human or computer turn |
 | `GameWindow._handle_square_clicked` | method | Handles human board click; highlights green or red |
 | `GameWindow._handle_move` | method | Highlights chosen square, schedules `_apply_move` via `QTimer` |

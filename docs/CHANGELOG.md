@@ -1,5 +1,35 @@
 # CHANGELOG
 
+## 2026-03-21 GMT — MVP implementation
+
+### Changes
+
+**Game layer (`game/`)**
+- Implemented `Board`: dict-backed 8×8 state; `__init__` sets standard starting position; `empty`, `get`, `place`, `remove`, `copy`, `piece_counts`, `all_pieces`, `__eq__`, `__repr__`
+- Implemented `rules`: `opponent`, `flipped_squares` (ray-casting), `legal_moves`, `apply_move` (returns new `Board`; raises `ValueError` if illegal), `is_game_over`
+- Implemented `Game`: mutable wrapper; `__init__` sets black as first player; `apply_move`, `pass_turn` mutate state; properties for `board`, `current_player`, `human_colour`, `computer_colour`, `turn_count`
+
+**AI layer (`ai/`)**
+- Implemented `scorer.score`: `piece_diff + 10*corner_diff + 10*diagonal_corner_penalty` per requirements
+- Implemented `minimax.best_move` and `_minimax`: minimax to configurable depth (default 4), pass-aware, random tie-breaking
+
+**UI layer (`ui/`)**
+- Implemented `SidePanel`: score label (`W / B`), turns label, hidden Finish button revealed on game end
+- Implemented `ComputerWorker`: `QRunnable` that calls `best_move` on a thread-pool thread and emits `signals.move_ready`
+- Implemented `BoardWidget`: paints 8×8 grid with axis labels, ~1 cm squares (physical-DPI-aware), legal-move shading, per-square highlights (bright green / red), white/black piece circles; emits `square_clicked`
+- Implemented `LaunchWindow`: three-button layout; creates `GameWindow` with `self` as launch reference, then hides
+- Implemented `GameWindow`: full turn loop — game-over check, pass detection (modal popup), human click handling (legal/illegal highlights via `QTimer`), computer moves via `ComputerWorker` + `QTimer` delay; `_on_finish` closes and restores `LaunchWindow`
+
+**Tests**
+- Implemented all 41 stub tests across `tests/game/` and `tests/ai/`; all pass
+
+**Housekeeping**
+- Removed `[tool.ruff.lint.per-file-ignores]` F401 suppression (no longer needed)
+- Updated `README.md` with usage and architecture overview
+- Updated `CODE_STRUCTURE.md`: `GameWindow.__init__` now takes `(human_colour, launch_window)`
+
+---
+
 ## 2026-03-19 23:57 GMT — Ruff linting configuration
 
 ### Changes
