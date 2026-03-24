@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 2026-03-24 03:35 GMT — Increase Experienced corner weight to 50
+
+- `ai/scorer.py`: `score_experienced` now adds an extra 40× corner bonus (on top of the 10× in `score_amateur`), making corners worth 50 for both Experienced and Expert levels.
+- `score_expert` simplified — the corner boost is now inherited from `score_experienced` rather than duplicated.
+- Updated affected test in `tests/ai/test_scorer.py`.
+
+## 2026-03-24 03:27 GMT — Strengthen Expert AI: deeper search and heavier corner weight
+
+- `ai/levels.py`: increased Expert search depth from 6 to 8.
+- `ai/scorer.py`: `score_expert` now adds an extra 40× corner bonus on top of the 10× already present in `score_amateur`, making corners worth 50 total for the Expert level.
+- Updated Expert level description in `LEVEL_CONFIGS`.
+
 ## 2026-03-24 GMT — Add tooltip to Finish button
 
 - `SidePanel`: added tooltip to the Finish button to satisfy the Phase 2 requirement that all buttons have tooltips.

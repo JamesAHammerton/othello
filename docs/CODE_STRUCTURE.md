@@ -77,7 +77,7 @@ Pure Python — no Qt dependency.
 | `score_naive` | function | `(board, colour) -> int` — raw piece count differential |
 | `score_amateur` | function | `(board, colour) -> int` — naive + corner bonus + X-square penalty |
 | `score_experienced` | function | `(board, colour) -> int` — amateur + C-square penalty |
-| `score_expert` | function | `(board, colour) -> int` — experienced + mobility term |
+| `score_expert` | function | `(board, colour) -> int` — experienced + boosted corner weight (50 total) + mobility term |
 | `score` | alias | Alias for `score_amateur` (backward compatibility) |
 
 ### `ai/minimax.py`

@@ -83,10 +83,10 @@ class TestScoreExperienced:
 
     def test_includes_amateur_component(self):
         board = Board.empty()
-        board.place((0, 0), "white")  # corner: +10 for white
+        board.place((0, 0), "white")  # corner: 50 total (10 amateur + 40 boost)
         board.place((1, 0), "black")  # C-square for black: +5 for white
-        # amateur part: corner_diff=1 → +10; experienced adds c_penalty: opp_c=1 → +5
-        assert score_experienced(board, "white") == 15
+        # amateur: corner_diff=1 → +10; experienced: extra corner → +40, c_penalty → +5
+        assert score_experienced(board, "white") == 55
 
     def test_symmetry(self):
         board = Board()
@@ -103,7 +103,8 @@ class TestScoreExpert:
         assert score_expert(board, "white") == score_experienced(board, "white")
 
     def test_mobility_advantage_reflected(self):
-        # After one black move, white typically has more moves than black
+        # After one black move, white typically has more moves than black.
+        # No corners occupied so extra corner weight contributes 0.
         board = Board()
         from game.rules import apply_move
 

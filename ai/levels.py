@@ -63,9 +63,10 @@ LEVEL_CONFIGS: dict[PlayerLevel, LevelConfig] = {
     PlayerLevel.EXPERT: LevelConfig(
         name="Expert",
         description=(
-            "Looks 6 moves ahead; also considers mobility. Uses alpha-beta pruning."
+            "Looks 8 moves ahead; weights corners heavily and considers mobility."
+            " Uses alpha-beta pruning."
         ),
-        depth=6,
+        depth=8,
         scorer=score_expert,
         use_alpha_beta=True,
     ),

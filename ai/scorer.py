@@ -41,16 +41,22 @@ def score_amateur(board: Board, colour: Colour) -> int:
 
 
 def score_experienced(board: Board, colour: Colour) -> int:
-    """Score with amateur formula plus C-square penalty.
+    """Score with amateur formula plus boosted corner weight and C-square penalty.
 
     Formula:
-        score_amateur + 5 * (opp_c_squares - own_c_squares)
+        score_amateur
+        + 40 * (own_corners - opp_corners)  # 10 already in amateur → 50 total
+        + 5  * (opp_c_squares - own_c_squares)
     """
     opp = opponent(colour)
+    own_corners = sum(1 for sq in CORNERS if board.get(sq) == colour)
+    opp_corners = sum(1 for sq in CORNERS if board.get(sq) == opp)
     colour_c = sum(1 for sq in C_SQUARES if board.get(sq) == colour)
     opp_c = sum(1 for sq in C_SQUARES if board.get(sq) == opp)
     c_penalty = opp_c - colour_c
-    return score_amateur(board, colour) + 5 * c_penalty
+    return (
+        score_amateur(board, colour) + 40 * (own_corners - opp_corners) + 5 * c_penalty
+    )
 
 
 def score_expert(board: Board, colour: Colour) -> int:
@@ -58,6 +64,8 @@ def score_expert(board: Board, colour: Colour) -> int:
 
     Formula:
         score_experienced + 1 * (own_legal_moves - opp_legal_moves)
+
+    Corner weight of 50 is already inherited from score_experienced.
     """
     opp = opponent(colour)
     own_mobility = len(legal_moves(board, colour))
