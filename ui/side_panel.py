@@ -26,6 +26,7 @@ class SidePanel(QWidget):
         self._turns_label = QLabel("Turns: 0")
         self._finish_btn = QPushButton("Finish")
         self._finish_btn.setVisible(False)
+        self._finish_btn.setToolTip("End the game and return to the launch window.")
         self._finish_btn.clicked.connect(self._on_finish_clicked)
 
         layout.addWidget(self._level_name_label)

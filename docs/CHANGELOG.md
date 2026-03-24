@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2026-03-24 GMT — Add tooltip to Finish button
+
+- `SidePanel`: added tooltip to the Finish button to satisfy the Phase 2 requirement that all buttons have tooltips.
+
 ## 2026-03-24 GMT — Update ARCHITECTURE.md for Phase 2
 
 - Added `ai/levels.py` to the AI layer overview, table, and file layout.
