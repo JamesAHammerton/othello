@@ -82,7 +82,7 @@ purpose (test coverage of the alias).
 ---
 
 ## ISSUE-6 — 2026-03-24 14:00 GMT — docs/PHASE2_PLAN.md is untracked
-**Status:** DROPPED
+**Status:** FIXED
 
 `docs/PHASE2_PLAN.md` was never committed to git. If this file is intended as a permanent
 planning record it should be committed; if it is a temporary working document it should be
