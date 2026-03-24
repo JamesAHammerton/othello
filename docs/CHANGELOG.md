@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2026-03-24 GMT — Update ARCHITECTURE.md for Phase 2
+
+- Added `ai/levels.py` to the AI layer overview, table, and file layout.
+- Updated `ComputerWorker` description to reference `choose_move` (was `best_move`).
+- Updated AI layer module descriptions to reflect scorer hierarchy and alpha-beta.
+
 ## 2026-03-24 GMT — Fix NAIVE scorer bug; expose best_move_alpha_beta
 
 - **Bug fix:** `best_move` and `_minimax` now accept a `scorer` parameter (default `score_amateur`). Previously `_minimax` hardcoded `score_amateur`, so the NAIVE level silently used the wrong scorer.
