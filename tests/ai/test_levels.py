@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 
 from ai.levels import (
@@ -7,6 +9,7 @@ from ai.levels import (
     choose_move,
     next_level,
 )
+from ai.scorer import score_amateur, score_naive
 from game.board import Board
 from game.rules import legal_moves
 
@@ -63,3 +66,17 @@ class TestChooseMove:
                 board.place((col, row), "white")
         with pytest.raises(ValueError, match="No legal moves"):
             choose_move(board, "black", PlayerLevel.DUMB)
+
+    def test_naive_uses_score_naive(self):
+        board = self._board()
+        with patch("ai.levels.best_move", return_value=(2, 3)) as mock_best_move:
+            choose_move(board, "black", PlayerLevel.NAIVE)
+        args = mock_best_move.call_args[0]
+        assert args[3] == score_naive
+
+    def test_amateur_uses_score_amateur(self):
+        board = self._board()
+        with patch("ai.levels.best_move", return_value=(2, 3)) as mock_best_move:
+            choose_move(board, "black", PlayerLevel.AMATEUR)
+        args = mock_best_move.call_args[0]
+        assert args[3] == score_amateur

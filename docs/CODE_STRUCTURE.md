@@ -84,9 +84,9 @@ Pure Python — no Qt dependency.
 
 | Symbol | Kind | Description |
 |--------|------|-------------|
-| `best_move` | function | `(board, colour, depth=4) -> Square` — minimax entry point; uses `score_amateur` |
-| `_minimax` | function | `(board, colour, maximising_colour, depth) -> int` — recursive minimax helper |
-| `_best_move_alpha_beta` | function | `(board, colour, depth, scorer) -> Square` — alpha-beta entry point with custom scorer |
+| `best_move` | function | `(board, colour, depth=4, scorer=score_amateur) -> Square` — minimax entry point |
+| `_minimax` | function | `(board, colour, maximising_colour, depth, scorer) -> int` — recursive minimax helper |
+| `best_move_alpha_beta` | function | `(board, colour, depth, scorer) -> Square` — alpha-beta entry point with custom scorer |
 | `_alpha_beta` | function | `(board, colour, maximising_colour, depth, alpha, beta, scorer) -> int` — recursive alpha-beta helper |
 
 ### `ai/levels.py`

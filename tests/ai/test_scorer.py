@@ -1,4 +1,4 @@
-from ai.scorer import score_amateur, score_experienced, score_expert, score_naive
+from ai.scorer import score, score_amateur, score_experienced, score_expert, score_naive
 from game.board import Board
 
 
@@ -124,3 +124,8 @@ class TestScoreExpert:
 
         board = apply_move(board, "black", (2, 3))
         assert score_expert(board, "white") == -score_expert(board, "black")
+
+
+class TestScoreAlias:
+    def test_score_is_score_amateur(self):
+        assert score is score_amateur

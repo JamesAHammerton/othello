@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 2026-03-24 GMT — Fix NAIVE scorer bug; expose best_move_alpha_beta
+
+- **Bug fix:** `best_move` and `_minimax` now accept a `scorer` parameter (default `score_amateur`). Previously `_minimax` hardcoded `score_amateur`, so the NAIVE level silently used the wrong scorer.
+- `choose_move` now passes `config.scorer` to `best_move`, so each level uses its configured scorer correctly.
+- Renamed `_best_move_alpha_beta` → `best_move_alpha_beta` (public API; it was already imported across modules).
+- Added `TestScoreAlias` to `test_scorer.py` to guard the `score = score_amateur` alias.
+- Added `test_naive_uses_score_naive` and `test_amateur_uses_score_amateur` to `test_levels.py`.
+
+---
+
 ## 2026-03-21 GMT — Phase 2: five AI levels with alpha-beta pruning
 
 ### Changes

@@ -2,7 +2,7 @@ import random
 from dataclasses import dataclass
 from enum import Enum
 
-from ai.minimax import _best_move_alpha_beta, best_move
+from ai.minimax import best_move, best_move_alpha_beta
 from ai.scorer import (
     Scorer,
     score_amateur,
@@ -102,6 +102,6 @@ def choose_move(board: Board, colour: Colour, level: PlayerLevel) -> Square:
         return random.choice(moves)
 
     if config.use_alpha_beta:
-        return _best_move_alpha_beta(board, colour, config.depth, config.scorer)
+        return best_move_alpha_beta(board, colour, config.depth, config.scorer)
 
-    return best_move(board, colour, config.depth)
+    return best_move(board, colour, config.depth, config.scorer)

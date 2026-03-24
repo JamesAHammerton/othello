@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from ai.minimax import _best_move_alpha_beta, best_move
+from ai.minimax import best_move, best_move_alpha_beta
 from ai.scorer import score_amateur
 from game.board import Board
 
@@ -41,7 +41,7 @@ class TestBestMove:
 class TestBestMoveAlphaBeta:
     def test_returns_legal_move(self):
         board = Board()
-        move = _best_move_alpha_beta(board, "black", depth=1, scorer=score_amateur)
+        move = best_move_alpha_beta(board, "black", depth=1, scorer=score_amateur)
         from game.rules import legal_moves
 
         assert move in legal_moves(board, "black")
@@ -52,7 +52,7 @@ class TestBestMoveAlphaBeta:
             for row in range(8):
                 board.place((col, row), "white")
         with pytest.raises(ValueError, match="No legal moves"):
-            _best_move_alpha_beta(board, "black", depth=1, scorer=score_amateur)
+            best_move_alpha_beta(board, "black", depth=1, scorer=score_amateur)
 
     def test_same_result_as_minimax(self):
         # Alpha-beta is an optimisation — must produce the same result as minimax.
@@ -64,7 +64,7 @@ class TestBestMoveAlphaBeta:
         board.place((0, 5), "white")
 
         with patch("random.choice", side_effect=lambda x: x[0]):
-            ab_move = _best_move_alpha_beta(
+            ab_move = best_move_alpha_beta(
                 board, "white", depth=1, scorer=score_amateur
             )
             mm_move = best_move(board, "white", depth=1)
@@ -75,7 +75,7 @@ class TestBestMoveAlphaBeta:
         board = Board()
         # Mock random.choice to always return the last element
         with patch("random.choice", side_effect=lambda x: x[-1]) as mock_choice:
-            _best_move_alpha_beta(board, "black", depth=1, scorer=score_amateur)
+            best_move_alpha_beta(board, "black", depth=1, scorer=score_amateur)
             mock_choice.assert_called_once()
 
     def test_deeper_search_matches_minimax(self):
@@ -86,7 +86,7 @@ class TestBestMoveAlphaBeta:
         board = apply_move(board, "black", (2, 3))
 
         with patch("random.choice", side_effect=lambda x: x[0]):
-            ab_move = _best_move_alpha_beta(
+            ab_move = best_move_alpha_beta(
                 board, "white", depth=3, scorer=score_amateur
             )
             mm_move = best_move(board, "white", depth=3)
