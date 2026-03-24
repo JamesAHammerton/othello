@@ -14,7 +14,7 @@ The application follows a layered architecture with a clear separation between g
 │          Game  Board  Rules             │
 ├─────────────────────────────────────────┤
 │                   AI Layer              │
-│            Minimax  Scorer              │
+│       Levels  Minimax  Scorer           │
 └─────────────────────────────────────────┘
 ```
 
@@ -48,10 +48,11 @@ Pure Python — no Qt dependency. Fully unit-testable in isolation.
 
 | Module | Responsibility |
 |--------|---------------|
-| `ai/scorer.py` | `score(board, colour) -> int` using the formula from the requirements |
-| `ai/minimax.py` | `best_move(board, colour, depth=4) -> Square` — minimax with random tie-breaking |
+| `ai/scorer.py` | Heuristic functions (`score_naive`, `score_amateur`, `score_experienced`, `score_expert`) returning `int` score differentials |
+| `ai/minimax.py` | `best_move` (minimax) and `best_move_alpha_beta` — tree search with random tie-breaking |
+| `ai/levels.py` | `PlayerLevel` enum, per-level `LevelConfig`, and `choose_move` — the single public AI entry point |
 
-The minimax search calls `rules.legal_moves` and `rules.apply_move` to explore the tree.
+The search functions call `rules.legal_moves` and `rules.apply_move` to explore the tree. `choose_move` selects the appropriate algorithm and scorer for the requested `PlayerLevel`.
 
 ---
 
@@ -65,7 +66,7 @@ PySide6 (Qt6). No game logic lives here — the UI reads from and writes to `Gam
 | `ui/game_window.py` | `GameWindow(QMainWindow)` — hosts `SidePanel` (left) and `BoardWidget` (right); orchestrates turn flow |
 | `ui/board_widget.py` | `BoardWidget(QWidget)` — paints the board; emits `square_clicked(Square)` signal; handles highlight states |
 | `ui/side_panel.py` | `SidePanel(QWidget)` — displays score, turn count, and post-game Finish button |
-| `ui/computer_worker.py` | `ComputerWorker(QRunnable)` — runs `ai.minimax.best_move` off the main thread; emits `move_ready(Square)` via a `WorkerSignals(QObject)` helper |
+| `ui/computer_worker.py` | `ComputerWorker(QRunnable)` — runs `ai.levels.choose_move` off the main thread; emits `move_ready(Square)` via a `WorkerSignals(QObject)` helper |
 
 ---
 
@@ -140,7 +141,8 @@ othello/
 ├── ai/
 │   ├── __init__.py
 │   ├── scorer.py
-│   └── minimax.py
+│   ├── minimax.py
+│   └── levels.py
 ├── ui/
 │   ├── __init__.py
 │   ├── launch_window.py

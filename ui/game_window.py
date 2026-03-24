@@ -1,6 +1,7 @@
 from PySide6.QtCore import QThreadPool, QTimer
 from PySide6.QtWidgets import QHBoxLayout, QMainWindow, QMessageBox, QWidget
 
+from ai.levels import PlayerLevel
 from game.board import Colour, Square
 from game.game import Game
 from ui.board_widget import HIGHLIGHT_ILLEGAL, HIGHLIGHT_LEGAL, BoardWidget
@@ -15,15 +16,19 @@ class GameWindow(QMainWindow):
     pass detection, and end-of-game handling.
     """
 
-    def __init__(self, human_colour: Colour, launch_window: QMainWindow) -> None:
+    def __init__(
+        self, human_colour: Colour, launch_window: QMainWindow, level: PlayerLevel
+    ) -> None:
         """Create and show a game with the human playing *human_colour*.
 
         Args:
             human_colour: "white" or "black".
             launch_window: The LaunchWindow to restore when the game ends.
+            level: The AI difficulty level for the computer player.
         """
         super().__init__()
         self._launch_window = launch_window
+        self._level = level
         self._game = Game(human_colour)
         self._pending_square: Square | None = None
 
@@ -39,6 +44,9 @@ class GameWindow(QMainWindow):
 
         self._board_widget.square_clicked.connect(self._handle_square_clicked)
         self._side_panel.finish_clicked.connect(self._on_finish)
+
+        self._side_panel.set_level(level)
+        self._side_panel.set_players(human_colour)
 
         self._refresh_ui()
         self.show()
@@ -79,7 +87,9 @@ class GameWindow(QMainWindow):
         else:
             self._board_widget.set_legal_moves([])
             self._board_widget.set_interactive(False)
-            worker = ComputerWorker(self._game.board.copy(), self._game.current_player)
+            worker = ComputerWorker(
+                self._game.board.copy(), self._game.current_player, self._level
+            )
             worker.signals.move_ready.connect(self._handle_computer_move)
             QThreadPool.globalInstance().start(worker)
 

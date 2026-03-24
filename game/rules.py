@@ -17,6 +17,19 @@ DIRECTIONS: list[tuple[int, int]] = [
 
 CORNERS: list[Square] = [(0, 0), (7, 0), (0, 7), (7, 7)]
 
+# Edge squares immediately adjacent to each corner — holding these is
+# disadvantageous because it makes it easier for the opponent to reach the corner.
+C_SQUARES: list[Square] = [
+    (1, 0),
+    (0, 1),  # adjacent to A1 (0,0)
+    (6, 0),
+    (7, 1),  # adjacent to H1 (7,0)
+    (1, 7),
+    (0, 6),  # adjacent to A8 (0,7)
+    (6, 7),
+    (7, 6),  # adjacent to H8 (7,7)
+]
+
 
 def opponent(colour: Colour) -> Colour:
     """Return the opposite colour."""

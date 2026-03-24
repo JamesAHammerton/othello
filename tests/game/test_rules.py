@@ -1,7 +1,28 @@
 import pytest
 
 from game.board import Board
-from game.rules import apply_move, flipped_squares, is_game_over, legal_moves, opponent
+from game.rules import (
+    C_SQUARES,
+    apply_move,
+    flipped_squares,
+    is_game_over,
+    legal_moves,
+    opponent,
+)
+
+
+class TestCSquares:
+    def test_has_eight_elements(self):
+        assert len(C_SQUARES) == 8
+
+    def test_contains_correct_squares(self):
+        expected = {(1, 0), (0, 1), (6, 0), (7, 1), (1, 7), (0, 6), (6, 7), (7, 6)}
+        assert set(C_SQUARES) == expected
+
+    def test_no_overlap_with_corners(self):
+        from game.rules import CORNERS
+
+        assert not set(C_SQUARES) & set(CORNERS)
 
 
 class TestOpponent:

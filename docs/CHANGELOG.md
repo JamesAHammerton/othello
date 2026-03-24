@@ -1,5 +1,51 @@
 # CHANGELOG
 
+## 2026-03-24 GMT — Add tooltip to Finish button
+
+- `SidePanel`: added tooltip to the Finish button to satisfy the Phase 2 requirement that all buttons have tooltips.
+
+## 2026-03-24 GMT — Update ARCHITECTURE.md for Phase 2
+
+- Added `ai/levels.py` to the AI layer overview, table, and file layout.
+- Updated `ComputerWorker` description to reference `choose_move` (was `best_move`).
+- Updated AI layer module descriptions to reflect scorer hierarchy and alpha-beta.
+
+## 2026-03-24 GMT — Fix NAIVE scorer bug; expose best_move_alpha_beta
+
+- **Bug fix:** `best_move` and `_minimax` now accept a `scorer` parameter (default `score_amateur`). Previously `_minimax` hardcoded `score_amateur`, so the NAIVE level silently used the wrong scorer.
+- `choose_move` now passes `config.scorer` to `best_move`, so each level uses its configured scorer correctly.
+- Renamed `_best_move_alpha_beta` → `best_move_alpha_beta` (public API; it was already imported across modules).
+- Added `TestScoreAlias` to `test_scorer.py` to guard the `score = score_amateur` alias.
+- Added `test_naive_uses_score_naive` and `test_amateur_uses_score_amateur` to `test_levels.py`.
+
+---
+
+## 2026-03-21 GMT — Phase 2: five AI levels with alpha-beta pruning
+
+### Changes
+
+**Game layer (`game/`)**
+- Added `C_SQUARES` constant to `game/rules.py`: 8 edge squares adjacent to the four corners
+
+**AI layer (`ai/`)**
+- Renamed `scorer.score` → `score_amateur`; added `score_naive` (piece count only), `score_experienced` (amateur + C-square penalty), `score_expert` (experienced + mobility). Added `Scorer` type alias. `score` alias retained for backward compatibility.
+- Added `_alpha_beta` and `_best_move_alpha_beta` to `ai/minimax.py`; accepts a `Scorer` callable. Existing `best_move`/`_minimax` unchanged.
+- Added new module `ai/levels.py`: `PlayerLevel` enum (DUMB/NAIVE/AMATEUR/EXPERIENCED/EXPERT), `LevelConfig` dataclass, `LEVEL_CONFIGS`, `LEVEL_ORDER`, `DEFAULT_LEVEL`, `choose_move()`, `next_level()`.
+
+**UI layer (`ui/`)**
+- `ComputerWorker`: accepts `PlayerLevel`; calls `choose_move()` instead of `best_move()`.
+- `LaunchWindow`: added level-cycle button (displays current level name, tooltip shows strategy description); added tooltips to Play and Quit buttons.
+- `SidePanel`: added level name/description labels and White/Black player identity labels; new `set_level()` and `set_players()` methods.
+- `GameWindow`: accepts `PlayerLevel`; calls `side_panel.set_level()` and `side_panel.set_players()` on init; passes level to `ComputerWorker`.
+
+**Tests**
+- Added `TestCSquares` to `tests/game/test_rules.py`
+- Replaced `TestScore` with `TestScoreNaive`, `TestScoreAmateur`, `TestScoreExperienced`, `TestScoreExpert` in `tests/ai/test_scorer.py`
+- Added `TestBestMoveAlphaBeta` to `tests/ai/test_minimax.py`
+- Added new `tests/ai/test_levels.py`: `TestLevelOrder`, `TestDefaultLevel`, `TestNextLevel`, `TestChooseMove`
+
+---
+
 ## 2026-03-21 GMT — MVP implementation
 
 ### Changes

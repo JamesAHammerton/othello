@@ -97,7 +97,7 @@ class BoardWidget(QWidget):
         super().showEvent(event)
         self.updateGeometry()
 
-    def paintEvent(self, event: QPaintEvent) -> None:  # noqa: N802
+    def paintEvent(self, _event: QPaintEvent) -> None:  # noqa: N802
         """Paint the board, pieces, labels, grid, and highlights."""
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
