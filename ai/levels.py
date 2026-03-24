@@ -102,6 +102,6 @@ def choose_move(board: Board, colour: Colour, level: PlayerLevel) -> Square:
         return random.choice(moves)
 
     if config.use_alpha_beta:
-        return best_move_alpha_beta(board, colour, config.depth, config.scorer)
+        return best_move_alpha_beta(board, colour, config.depth, scorer=config.scorer)
 
-    return best_move(board, colour, config.depth, config.scorer)
+    return best_move(board, colour, config.depth, scorer=config.scorer)

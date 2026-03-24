@@ -71,12 +71,10 @@ class TestChooseMove:
         board = self._board()
         with patch("ai.levels.best_move", return_value=(2, 3)) as mock_best_move:
             choose_move(board, "black", PlayerLevel.NAIVE)
-        args = mock_best_move.call_args[0]
-        assert args[3] == score_naive
+        assert mock_best_move.call_args.kwargs["scorer"] == score_naive
 
     def test_amateur_uses_score_amateur(self):
         board = self._board()
         with patch("ai.levels.best_move", return_value=(2, 3)) as mock_best_move:
             choose_move(board, "black", PlayerLevel.AMATEUR)
-        args = mock_best_move.call_args[0]
-        assert args[3] == score_amateur
+        assert mock_best_move.call_args.kwargs["scorer"] == score_amateur
