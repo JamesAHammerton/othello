@@ -71,7 +71,3 @@ def score_expert(board: Board, colour: Colour) -> int:
     own_mobility = len(legal_moves(board, colour))
     opp_mobility = len(legal_moves(board, opp))
     return score_experienced(board, colour) + (own_mobility - opp_mobility)
-
-
-# Alias kept for backward compatibility with existing minimax code.
-score = score_amateur
