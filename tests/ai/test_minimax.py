@@ -2,9 +2,10 @@ from unittest.mock import patch
 
 import pytest
 
-from ai.minimax import best_move, best_move_alpha_beta
-from ai.scorer import score_amateur
+from ai.minimax import _alpha_beta, _minimax, best_move, best_move_alpha_beta
+from ai.scorer import score_amateur, score_naive
 from game.board import Board
+from game.rules import apply_move
 
 
 class TestBestMove:
@@ -92,3 +93,80 @@ class TestBestMoveAlphaBeta:
             mm_move = best_move(board, "white", depth=3)
 
         assert ab_move == mm_move
+
+
+def _pass_does_not_skip_a_real_ply_board() -> Board:
+    """Board where white has two independent moves, and after playing
+    either one, black is forced to pass leaving white free to play the
+    other.
+
+    Layout (boundary column avoids the symmetric reverse-flank that would
+    otherwise also give black a move):
+        white(0,0) black(1,0) empty(2,0)
+        white(0,3) black(1,3) empty(2,3)
+    """
+    board = Board.empty()
+    board.place((0, 3), "white")
+    board.place((1, 3), "black")
+    board.place((0, 0), "white")
+    board.place((1, 0), "black")
+    return board
+
+
+class TestForcedPassPreservesDepth:
+    """ISSUE-2: a forced pass must not consume a level of search depth."""
+
+    def test_minimax_explores_ply_after_forced_pass(self):
+        board = _pass_does_not_skip_a_real_ply_board()
+        after_first_move = apply_move(board, "white", (2, 3))
+
+        # At this node black must pass and white still has a real move
+        # ((2, 0)) available; a correct depth=1 search from here must
+        # explore that move rather than evaluating immediately.
+        value = _minimax(after_first_move, "black", "white", 1, score_naive)
+        white_count, black_count = apply_move(
+            after_first_move, "white", (2, 0)
+        ).piece_counts()
+        assert value == white_count - black_count
+
+    def test_alpha_beta_explores_ply_after_forced_pass(self):
+        board = _pass_does_not_skip_a_real_ply_board()
+        after_first_move = apply_move(board, "white", (2, 3))
+
+        value = _alpha_beta(
+            after_first_move,
+            "black",
+            "white",
+            1,
+            float("-inf"),
+            float("inf"),
+            score_naive,
+        )
+        white_count, black_count = apply_move(
+            after_first_move, "white", (2, 0)
+        ).piece_counts()
+        assert value == white_count - black_count
+
+
+class TestAlphaBetaTieBreakingPool:
+    """ISSUE-3: root scores must be exact so tie-breaking is unbiased."""
+
+    def test_root_scores_are_exact_not_pruned(self):
+        # Two distinct, non-cutoff-triggering root moves on a small custom
+        # board; alpha tightened across siblings would otherwise cause the
+        # second move searched to be returned with a pruned (inexact) score.
+        board = Board()
+        moves = []
+
+        def fake_alpha_beta(
+            board, colour, maximising_colour, depth, alpha, beta, scorer
+        ):
+            moves.append(alpha)
+            return 0
+
+        with patch("ai.minimax._alpha_beta", side_effect=fake_alpha_beta):
+            best_move_alpha_beta(board, "black", depth=1, scorer=score_amateur)
+
+        # Every sibling at the root must be searched with a fresh window,
+        # not with alpha tightened by a previous sibling's score.
+        assert all(a == float("-inf") for a in moves)

@@ -53,8 +53,8 @@ def _minimax(
 
     moves = legal_moves(board, colour)
     if not moves:
-        # Current player must pass; opponent plays next at same depth
-        return _minimax(board, opponent(colour), maximising_colour, depth - 1, scorer)
+        # A forced pass is not a real ply, so it must not consume depth budget.
+        return _minimax(board, opponent(colour), maximising_colour, depth, scorer)
 
     if colour == maximising_colour:
         best = float("-inf")
@@ -92,8 +92,12 @@ def best_move_alpha_beta(
     if not moves:
         raise ValueError(f"No legal moves for {colour}")
 
+    # Each root move is searched with a fresh (-inf, inf) window rather than
+    # tightening alpha across siblings. Tightening alpha would let later
+    # siblings get pruned and return inexact (lower-than-true) scores, which
+    # would unfairly exclude truly-tied moves from the tie-break pool below.
+    # This costs some pruning at the root only; children are unaffected.
     scored: list[tuple[int, Square]] = []
-    alpha = float("-inf")
     for sq in moves:
         new_board = apply_move(board, colour, sq)
         s = _alpha_beta(
@@ -101,12 +105,11 @@ def best_move_alpha_beta(
             opponent(colour),
             colour,
             depth - 1,
-            alpha,
+            float("-inf"),
             float("inf"),
             scorer,
         )
         scored.append((s, sq))
-        alpha = max(alpha, s)
 
     best_score = max(s for s, _ in scored)
     best_moves = [sq for s, sq in scored if s == best_score]
@@ -141,8 +144,9 @@ def _alpha_beta(
 
     moves = legal_moves(board, colour)
     if not moves:
+        # A forced pass is not a real ply, so it must not consume depth budget.
         return _alpha_beta(
-            board, opponent(colour), maximising_colour, depth - 1, alpha, beta, scorer
+            board, opponent(colour), maximising_colour, depth, alpha, beta, scorer
         )
 
     if colour == maximising_colour:
