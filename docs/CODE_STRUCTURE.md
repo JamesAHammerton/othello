@@ -78,7 +78,6 @@ Pure Python — no Qt dependency.
 | `score_amateur` | function | `(board, colour) -> int` — naive + corner bonus + X-square penalty |
 | `score_experienced` | function | `(board, colour) -> int` — amateur + C-square penalty |
 | `score_expert` | function | `(board, colour) -> int` — experienced + boosted corner weight (50 total) + mobility term |
-| `score` | alias | Alias for `score_amateur` (backward compatibility) |
 
 ### `ai/minimax.py`
 
@@ -130,6 +129,7 @@ PySide6 (Qt6). No game logic.
 | `GameWindow._handle_move` | method | Highlights chosen square, schedules `_apply_move` via `QTimer` |
 | `GameWindow._apply_move` | method | Commits move to `Game`, repaints, calls `_start_turn` |
 | `GameWindow._handle_computer_move` | method | Slot for `ComputerWorker.signals.move_ready` |
+| `GameWindow._handle_computer_error` | method | Slot for `ComputerWorker.signals.move_failed` — reports error and closes gracefully |
 | `GameWindow._show_pass_popup` | method | Modal dialog for a forced pass |
 | `GameWindow._show_game_over_popup` | method | Modal dialog announcing game end |
 | `GameWindow._on_finish` | method | Closes window, shows `LaunchWindow` |
@@ -174,9 +174,10 @@ PySide6 (Qt6). No game logic.
 |--------|------|-------------|
 | `WorkerSignals` | class | `QObject` — holds signals for `ComputerWorker` |
 | `WorkerSignals.move_ready` | signal | `Signal(tuple)` — emits `Square` |
+| `WorkerSignals.move_failed` | signal | `Signal(str)` — emits an error message if `choose_move` raises |
 | `ComputerWorker` | class | `QRunnable` — runs `choose_move` off the main thread |
 | `ComputerWorker.__init__` | method | `(board, colour, level)` — stores board copy, colour, and level |
-| `ComputerWorker.run` | method | Calls `choose_move`, emits `signals.move_ready` |
+| `ComputerWorker.run` | method | Calls `choose_move`, emits `signals.move_ready`; on exception emits `signals.move_failed` |
 
 ---
 

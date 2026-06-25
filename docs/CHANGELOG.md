@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## 2026-06-25 15:22 GMT — Fix ISSUE-1: ComputerWorker silently swallows exceptions
+
+- `ui/computer_worker.py`: wrapped `choose_move` call in a `try/except` block in `ComputerWorker.run`. On exception the error is logged via `logging.exception` and emitted via a new `signals.move_failed: Signal(str)` signal instead of silently dropping the exception and hanging the game.
+- `ui/game_window.py`: connected `move_failed` to a new `_handle_computer_error` slot that disables the board, shows a `QMessageBox` with the error text, and calls `_on_finish()` to return to the launch window.
+
+## 2026-06-25 15:22 GMT — Fix ISSUE-2: Passes consume search depth
+
+- `ai/minimax.py`: in both `_minimax` and `_alpha_beta`, when a player has no legal moves (forced pass) the recursive call now passes `depth` unchanged instead of `depth - 1`. Depth now counts only plies of actual moves, not pass events, so Experienced and Expert levels (depths 6 and 8) search the correct number of real plies in late-game positions.
+- `tests/ai/test_minimax.py`: added `TestForcedPassPreservesDepth` with tests for both `_minimax` and `_alpha_beta` verifying the pass node does not consume depth on a hand-crafted board where a forced pass is followed by a real move.
+
+## 2026-06-25 15:22 GMT — Fix ISSUE-3: Alpha-beta tie-breaking can be skewed
+
+- `ai/minimax.py`: `best_move_alpha_beta` now passes a fresh `(-inf, inf)` window to every root-level child call rather than tightening `alpha` across siblings. This ensures each root move receives an exact score, so the tie-break pool contains all truly equal moves.
+- `tests/ai/test_minimax.py`: added `TestAlphaBetaTieBreakingPool.test_root_scores_are_exact_not_pruned` verifying that every root child is searched with `alpha = -inf`.
+
+## 2026-06-25 15:22 GMT — Fix ISSUE-4: assert used in production turn-loop path
+
+- `ui/game_window.py`: replaced `assert self._pending_square is not None` in `_apply_move` with an explicit `if self._pending_square is None: raise RuntimeError(...)` guard, which survives Python's `-O` optimised-build flag.
+
+## 2026-06-25 15:22 GMT — Fix ISSUE-5: score alias comment is stale
+
+- `ai/scorer.py`: removed the `score = score_amateur` alias entirely. It was no longer used by `minimax.py` (which already imports `score_amateur` directly) and served only to add confusion.
+- `tests/ai/test_scorer.py`: removed the `TestScoreAlias` class and the `score` import that tested the alias.
+
 ## 2026-06-25 15:11 GMT — Tighten doc organization and add git workflow rules
 
 - `docs/ARCHITECTURE.md`: replaced the duplicated, already-stale file tree in "File Layout"

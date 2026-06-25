@@ -18,7 +18,7 @@ Entries are ordered oldest-first. Update the status in-place when an issue is re
 ---
 
 ## ISSUE-1 — 2026-03-24 14:00 GMT — ComputerWorker silently swallows exceptions
-**Status:** OPEN
+**Status:** FIXED
 
 `ui/computer_worker.py:36-39` — If `choose_move` raises (e.g. the board position has no
 legal moves due to a bug, or a scorer throws), `QRunnable` drops the exception and
@@ -30,7 +30,7 @@ close the game window gracefully.
 ---
 
 ## ISSUE-2 — 2026-03-24 14:00 GMT — Passes consume search depth
-**Status:** OPEN
+**Status:** FIXED
 
 `ai/minimax.py:57` and `ai/minimax.py:144` — When a player has no legal moves,
 both `_minimax` and `_alpha_beta` recurse with `depth - 1`. A forced pass costs one level
@@ -44,7 +44,7 @@ counts plies of actual moves rather than pass events.
 ---
 
 ## ISSUE-3 — 2026-03-24 14:00 GMT — Alpha-beta tie-breaking can be skewed
-**Status:** OPEN
+**Status:** FIXED
 
 `ai/minimax.py:96-113` — `best_move_alpha_beta` updates `alpha` as it evaluates root
 moves, then collects all returned scores for tie-breaking. Moves evaluated after the first
@@ -58,7 +58,7 @@ skews the randomness among equally-valued alternatives.
 ---
 
 ## ISSUE-4 — 2026-03-24 14:00 GMT — assert used in production turn-loop path
-**Status:** OPEN
+**Status:** FIXED
 
 `ui/game_window.py:125` — `assert self._pending_square is not None` guards the application
 of a pending move. Python's `-O` flag silently disables all `assert` statements, so this
@@ -71,7 +71,7 @@ Replace with an explicit guard (e.g. `if self._pending_square is None: return` o
 ---
 
 ## ISSUE-5 — 2026-03-24 14:00 GMT — score alias comment is stale
-**Status:** OPEN
+**Status:** FIXED
 
 `ai/scorer.py:77` — The `score = score_amateur` alias carries the comment "backward
 compatibility with existing minimax code", but `minimax.py` already imports `score_amateur`

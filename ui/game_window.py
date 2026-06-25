@@ -91,6 +91,7 @@ class GameWindow(QMainWindow):
                 self._game.board.copy(), self._game.current_player, self._level
             )
             worker.signals.move_ready.connect(self._handle_computer_move)
+            worker.signals.move_failed.connect(self._handle_computer_error)
             QThreadPool.globalInstance().start(worker)
 
     def _handle_square_clicked(self, square: Square) -> None:
@@ -122,7 +123,8 @@ class GameWindow(QMainWindow):
 
     def _apply_move(self) -> None:
         """Apply the pending move to the game, refresh the UI, start next turn."""
-        assert self._pending_square is not None
+        if self._pending_square is None:
+            raise RuntimeError("_apply_move called with no pending square")
         self._game.apply_move(self._pending_square)
         self._pending_square = None
         self._board_widget.clear_highlight()
@@ -132,6 +134,21 @@ class GameWindow(QMainWindow):
     def _handle_computer_move(self, square: Square) -> None:
         """Slot called when ``ComputerWorker`` emits ``move_ready``."""
         self._handle_move(square)
+
+    def _handle_computer_error(self, message: str) -> None:
+        """Slot called when ``ComputerWorker`` emits ``move_failed``.
+
+        Reports the failure to the user and closes the game gracefully
+        rather than leaving the turn loop hung with no feedback.
+        """
+        self._board_widget.set_interactive(False)
+        box = QMessageBox(self)
+        box.setWindowTitle("Computer Error")
+        box.setText(
+            f"The computer player encountered an error and cannot continue:\n{message}"
+        )
+        box.exec()
+        self._on_finish()
 
     # ------------------------------------------------------------------
     # Popups
