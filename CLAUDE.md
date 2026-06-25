@@ -41,7 +41,23 @@ in order to guide where/how changes should be made.
 * Once changes have been made, update CODE_STRUCTURE.md, and [CHANGELOG.md](docs/CHANGELOG.md)
   * CHANGELOG entries must include the date, time, and timezone in the heading, e.g. `2026-03-19 23:34 GMT — Description`
   * Always use GMT as the timezone
+* If the change implements a [TODO.md](TODO.md) entry or fixes a [docs/ISSUES.md](docs/ISSUES.md) entry,
+  update that entry's status in-place (`IMPLEMENTED`/`FIXED`/`DROPPED`).
 * Ensure [README.md](README.md) is kept up to date too.
+
+# Git workflow
+
+When asked to implement a set of [TODO.md](TODO.md) entries or fix a set of
+[docs/ISSUES.md](docs/ISSUES.md) entries:
+
+* Create a feature branch before starting work, named after the set, e.g.
+  `todo-1-2-3` or `issue-4-5`. Never commit this work directly to `main`.
+* Commit as soon as a single TODO/ISSUE in the set is finished (code + tests passing +
+  status updated to `IMPLEMENTED`/`FIXED` + CODE_STRUCTURE.md/CHANGELOG.md updated) —
+  one commit per item, not one commit for the whole set. Reference the item in the
+  commit message, e.g. `Implement TODO-1: stable disc detection`.
+* Once every item in the set has been committed, open a PR from the feature branch
+  back to `main` summarising the items it covers.
 
 # Executing code
 

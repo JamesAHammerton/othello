@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2026-06-25 15:11 GMT — Tighten doc organization and add git workflow rules
+
+- `docs/ARCHITECTURE.md`: replaced the duplicated, already-stale file tree in "File Layout"
+  with a pointer to `CODE_STRUCTURE.md` as the single authoritative module list.
+- `CLAUDE.md`: added a rule to update TODO.md/ISSUES.md entry statuses in-place when the
+  corresponding work is implemented/fixed/dropped, and a new "Git workflow" section requiring
+  a feature branch, one commit per finished TODO/ISSUE item, and a PR once a set is complete.
+
+## 2026-03-24 03:51 GMT — Delete PHASE2_PLAN.md; close ISSUE-6
+
+- Deleted the untracked `docs/PHASE2_PLAN.md` — fully superseded by the implemented code, docs, and git history.
+- `docs/ISSUES.md`: marked ISSUE-6 as `FIXED`.
+
+## 2026-03-24 03:49 GMT — Add ISSUES.md and update TODO.md with numbered entries and status fields
+
+- Added `docs/ISSUES.md` to track bugs and correctness concerns identified during code review, with the same numbered-entry/status format as TODO.md.
+- `TODO.md`: restructured existing entries into the numbered `TODO-N` format with `Status` fields.
+
 ## 2026-03-24 03:35 GMT — Increase Experienced corner weight to 50
 
 - `ai/scorer.py`: `score_experienced` now adds an extra 40× corner bonus (on top of the 10× in `score_amateur`), making corners worth 50 for both Experienced and Expert levels.

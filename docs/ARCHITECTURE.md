@@ -130,35 +130,9 @@ GameWindow
 
 ## File Layout
 
-```
-othello/
-├── main.py                  # QApplication entry point
-├── game/
-│   ├── __init__.py
-│   ├── board.py
-│   ├── rules.py
-│   └── game.py
-├── ai/
-│   ├── __init__.py
-│   ├── scorer.py
-│   ├── minimax.py
-│   └── levels.py
-├── ui/
-│   ├── __init__.py
-│   ├── launch_window.py
-│   ├── game_window.py
-│   ├── board_widget.py
-│   ├── side_panel.py
-│   └── computer_worker.py
-└── tests/
-    ├── game/
-    │   ├── test_board.py
-    │   ├── test_rules.py
-    │   └── test_game.py
-    └── ai/
-        ├── test_scorer.py
-        └── test_minimax.py
-```
+Modules are grouped by layer as shown in the Overview diagram (`game/`, `ai/`, `ui/`, plus
+`tests/` mirroring each layer). See [`CODE_STRUCTURE.md`](CODE_STRUCTURE.md) for the
+authoritative, kept-current list of modules and their public symbols.
 
 ---
 
